@@ -1,32 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { supabase } from "../supabaseClient";
-import approved from "../approved.svg";
 
 const Account = () => {
+  // State to manage the visibility of the password change form
   const [open, setOpen] = useState(false);
+
+  // State to store the new password input
   const [newPassword, setNewPassword] = useState();
-  let navigate = useNavigate();
+
+  // Navigation hook to redirect users
+  const navigate = useNavigate();
+
+  // Access token from session storage
   const token = sessionStorage.getItem("token");
-  useEffect(() => {
-    if (!token) {
-      navigate("/");
-    }
-  });
+
+  // Parse token data
   let obj = JSON.parse(token);
 
+  // Handle new password input
   function handleNewPassword(event) {
     setNewPassword(event.target.value);
   }
 
+  // Redirect to login page if there is no token
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+    }
+  }, [token, navigate]);
+
+  // Function to sign out the user
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     sessionStorage.clear("token");
     navigate("/");
   }
 
+  // Function to change user password
   async function changePassword() {
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     setOpen(false);
@@ -34,6 +46,7 @@ const Account = () => {
 
   return (
     <div className="h-screen">
+      {/* Password Change Form (conditionally rendered based on 'open' state) */}
       {open ? (
         <div
           className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center z-50"
@@ -78,12 +91,15 @@ const Account = () => {
       ) : (
         <></>
       )}
+
+      {/* Navbar Component */}
       <Navbar />
+
+      {/* Account Information */}
       <div className="mt-36">
         <div className="mx-auto my-auto w-[500px]">
           <div className="bg-white rounded overflow-hidden shadow-lg">
             <div className="text-center p-6 bg-purple-600 border-b">
-              (
               <svg
                 aria-hidden="true"
                 role="img"
@@ -102,6 +118,8 @@ const Account = () => {
                 {obj.user.email}
               </p>
             </div>
+
+            {/* Password Change Button */}
             <div className="border-b">
               <button
                 className="px-4 py-6 hover:bg-gray-100 flex flex-1 w-full"
@@ -133,6 +151,7 @@ const Account = () => {
               </button>
             </div>
 
+            {/* Logout Button */}
             <div>
               <button
                 onClick={() => {
