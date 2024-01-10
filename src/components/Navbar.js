@@ -22,9 +22,6 @@ const Navbar = () => {
         .select("*")
         .eq("email", email);
 
-      // Log user data to console (for debugging purposes)
-      console.log(data);
-
       // Set the user's role in the component state
       setRole(data[0]?.role);
     } catch (error) {

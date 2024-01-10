@@ -16,7 +16,6 @@ const Account = () => {
     }
   });
   let obj = JSON.parse(token);
-  console.log(obj);
 
   function handleNewPassword(event) {
     setNewPassword(event.target.value);
