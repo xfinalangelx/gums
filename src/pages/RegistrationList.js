@@ -12,6 +12,7 @@ const RegistrationList = () => {
 
   useEffect(() => {
     if (!token) {
+      // Redirect to login if there is no token
       navigate("/");
     } else {
       async function fetchRegistrationForms() {
@@ -39,29 +40,37 @@ const RegistrationList = () => {
     "Action",
   ];
 
+  // Function to approve a user and handle related actions
   const approveUser = async (id, fullName, email, matricNumber, role) => {
-    console.log(fullName, email, matricNumber, role);
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: matricNumber,
-      fullName: fullName,
-      role: role,
-      matricNumber: matricNumber,
-    });
-    console.log("HELLOOOO");
-    console.log(data);
-    const {} = await supabase
-      .from("userlist")
-      .insert({
+    try {
+      // Sign up the user
+      const { data, error } = await supabase.auth.signUp({
         email: email,
+        password: matricNumber,
         fullName: fullName,
-        matricNumber: matricNumber,
         role: role,
-      })
-      .select();
+        matricNumber: matricNumber,
+      });
 
-    const {} = await supabase.from("registration").delete().eq("id", id);
-    window.location.reload();
+      // Insert user details into the userlist table
+      const {} = await supabase
+        .from("userlist")
+        .insert({
+          email: email,
+          fullName: fullName,
+          matricNumber: matricNumber,
+          role: role,
+        })
+        .select();
+
+      // Delete the approved registration form
+      const {} = await supabase.from("registration").delete().eq("id", id);
+
+      // Refresh the page
+      window.location.reload();
+    } catch (error) {
+      console.error("Error approving user:", error.message);
+    }
   };
 
   return (
@@ -105,11 +114,7 @@ const RegistrationList = () => {
                     </td>
                     <td className={classes}>
                       <img
-                        src={
-                          "https://hvzzpfhyghxvhtfvtivo.supabase.co/storage/v1/object/public/documents/" +
-                          matricNumber +
-                          "document"
-                        }
+                        src={`https://hvzzpfhyghxvhtfvtivo.supabase.co/storage/v1/object/public/documents/${matricNumber}document`}
                         alt="document"
                         className="w-20 h-20"
                       />
