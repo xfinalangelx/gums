@@ -49,6 +49,7 @@ const Feedback = () => {
 
   let navigate = useNavigate();
 
+  // Event handlers for input fields
   function handleFullName(event) {
     setFullName(event.target.value);
   }
@@ -65,11 +66,11 @@ const Feedback = () => {
   }
 
   function handleDocument(event) {
-    console.log(event);
     setDocument(event.target.files[0]);
     setDocumentValidator(true);
   }
 
+  // Fetch user role from Supabase
   async function roleSet() {
     const { data, error } = await supabase
       .from("userlist")
@@ -83,11 +84,13 @@ const Feedback = () => {
     setRole(data[0]?.role);
   }
 
+  // Fetch all feedback lists
   async function fetchAllList() {
     const { data } = await supabase.from("feedbacks").select("*");
     setTotalFeedbackList(data);
   }
 
+  // Initial data fetching on component mount
   useEffect(() => {
     const fetchData = async () => {
       if (!token) {
@@ -103,7 +106,6 @@ const Feedback = () => {
 
         setUserFeedbackList(data);
         fetchAllList();
-        console.log(data);
       } catch (error) {
         console.error("Error fetching user data:", error.message);
       }
@@ -112,6 +114,7 @@ const Feedback = () => {
     fetchData();
   }, [token, navigate, update]);
 
+  // Submit feedback form
   async function submitFeedbackForm() {
     const { error, data } = await supabase
       .from("feedbacks")
@@ -125,7 +128,6 @@ const Feedback = () => {
       })
       .select();
 
-    console.log("please", data[0].created_at);
     if (documentValidator) {
       const { res } = await supabase.storage
         .from("feedback")
@@ -166,33 +168,32 @@ const Feedback = () => {
     return formattedDate;
   }
 
+  // Complete feedback status
   const completeFeedback = async (id) => {
-    console.log(id);
     let { data, error } = await supabase.rpc(
       "update_feedback_status_completed",
       {
         feedback_id: id,
       }
     );
-    console.log(data);
     window.location.reload();
   };
 
+  // Process feedback status
   const processFeedback = async (id) => {
-    console.log(id);
     let { data, error } = await supabase.rpc(
       "update_feedback_status_processing",
       {
         feedback_id: id,
       }
     );
-    console.log(data);
     window.location.reload();
   };
 
   return (
     <>
       <Navbar />
+      {/* Conditionally renders the components based on user role */}
       {role === "admin" || role === "advisor" ? (
         <div>
           <table className="w-full min-w-max table-auto text-left">
