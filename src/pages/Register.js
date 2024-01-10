@@ -11,6 +11,7 @@ const Register = () => {
   const [documentValidator, setDocumentValidator] = useState(false);
   const [open, setOpen] = useState(false);
 
+  // Event handlers for input fields
   function handleEmail(event) {
     setEmail(event.target.value);
   }
@@ -28,11 +29,11 @@ const Register = () => {
   }
 
   function handleDocument(event) {
-    console.log(event);
     setDocument(event.target.files[0]);
     setDocumentValidator(true);
   }
 
+  // Form validation function
   function validator() {
     return (
       email.length < 1 ||
@@ -43,8 +44,8 @@ const Register = () => {
     );
   }
 
+  // Submit registration form
   async function submitRegistrationForm() {
-    console.log("register");
     const { error, data } = await supabase.from("registration").insert({
       email: email,
       fullName: fullName,
@@ -56,12 +57,14 @@ const Register = () => {
       .from("documents")
       .upload(matricNumber + "document", document);
 
+    // Open the success modal
     setOpen(true);
   }
 
   return (
     <>
       {open ? (
+        // Success Modal
         <div
           className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center z-50"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
@@ -88,6 +91,8 @@ const Register = () => {
       ) : (
         <></>
       )}
+
+      {/* Main Registration Form */}
       <div className="bg-white flex justify-center items-center h-screen">
         <div className="w-full h-full hidden lg:flex lg:justify-center lg:items-center bg-purple-600">
           <h1 className="text-white font-black text-4xl">
@@ -98,6 +103,7 @@ const Register = () => {
         <div className="lg:px-36 md:px-52 sm:20 p-8 w-full lg:w-1/2">
           <h1 className="text-2xl font-semibold mb-4">Registration Form</h1>
 
+          {/* Email Input */}
           <div className="mb-4">
             <label className="block text-gray-600">Email</label>
             <input
@@ -114,6 +120,7 @@ const Register = () => {
             )}
           </div>
 
+          {/* Full Name Input */}
           <div className="mb-4">
             <label className="block text-gray-600">Full Name</label>
             <input
@@ -130,6 +137,7 @@ const Register = () => {
             )}
           </div>
 
+          {/* Matric Number Input */}
           <div className="mb-4">
             <label className="block text-gray-600">Matric Number</label>
             <input
@@ -146,6 +154,7 @@ const Register = () => {
             )}
           </div>
 
+          {/* Role Dropdown */}
           <div className="mb-4">
             <label className="block text-gray-600">Role</label>
             <div className="flex flex-col gap-2">
@@ -172,6 +181,7 @@ const Register = () => {
             </div>
           </div>
 
+          {/* Document Upload Input */}
           <div className="mb-4">
             <label className="block text-gray-600">
               Verification Documents
@@ -192,6 +202,7 @@ const Register = () => {
             )}
           </div>
 
+          {/* Submit Button */}
           <button
             className="bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md py-2 px-4 w-full disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-purple-600"
             disabled={validator()}
@@ -200,6 +211,7 @@ const Register = () => {
             Submit Registration
           </button>
 
+          {/* Login Link */}
           <div className="mt-6 text-blue-500 text-center flex flex-col gap-4">
             <a href="/" className="hover:underline">
               Have an account? Login
