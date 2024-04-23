@@ -80,7 +80,7 @@ const Navbar = () => {
         </a>
 
         {/* Registration List Link (conditionally rendered based on user role) */}
-        {role === "admin" || role === "advisor" ? (
+        {role === "admin" || role === "advisor" || !role ? (
           <a
             href="/registration"
             className="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
@@ -90,6 +90,25 @@ const Navbar = () => {
         ) : (
           <></>
         )}
+
+        {/* Forum List Link (conditionally rendered based on user role) */}
+        {role === "admin" || role === "advisor" || !role ? (
+          <a
+            href="/forum"
+            className="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+          >
+            Forum
+          </a>
+        ) : (
+          <></>
+        )}
+
+        <a
+          href="/event"
+          className="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+        >
+          Events
+        </a>
 
         {/* Account Settings Link */}
         <a

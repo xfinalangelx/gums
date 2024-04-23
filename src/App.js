@@ -8,6 +8,8 @@ import Feedback from "./pages/Feedback";
 import RegistrationList from "./pages/RegistrationList";
 import Account from "./pages/Account";
 import { useEffect, useState } from "react";
+import Forum from "./pages/Forum";
+import Events from "./pages/Events";
 
 function App() {
   // Log the supabase object to the console
@@ -39,6 +41,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
           <Route path="/feedback" element={<Feedback />} />
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/event" element={<Events />} />
           <Route path="/registration" element={<RegistrationList />} />
           <Route path="/account" element={<Account />} />
         </Routes>
