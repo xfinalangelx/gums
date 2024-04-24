@@ -193,25 +193,6 @@ const Account = () => {
           </div>
         </div>
       </div>
-
-      {role === "member" || role === "admin" ? (
-        <div className="px-6 py-8 flex flex-col gap-4">
-          <p className="text-xl font-semibold">Attendance section</p>
-          <div className="bg-green-200 rounded-md">
-            <p className="text-lg font-medium p-4">
-              Please mark your attendance
-            </p>
-            <p className="text-md font-medium px-4 py-3">
-              Attendance Title (Attendance Availability)
-            </p>
-            <button className="w-full py-3 bg-green-600 hover:bg-green-700 text-white text-md font-semibold rounded-b-md">
-              Confirm Attendance
-            </button>
-          </div>
-        </div>
-      ) : (
-        <></>
-      )}
     </div>
   );
 };
