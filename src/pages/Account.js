@@ -10,6 +10,8 @@ const Account = () => {
   // State to store the new password input
   const [newPassword, setNewPassword] = useState();
 
+  const [role, setRole] = useState();
+
   // Navigation hook to redirect users
   const navigate = useNavigate();
 
@@ -24,11 +26,35 @@ const Account = () => {
     setNewPassword(event.target.value);
   }
 
-  // Redirect to login page if there is no token
-  useEffect(() => {
-    if (!token) {
-      navigate("/");
+  // Fetch user role from Supabase
+  async function roleSet() {
+    const { data, error } = await supabase
+      .from("userlist")
+      .select("*")
+      .eq("email", obj.user.email);
+
+    if (error) {
+      throw error;
     }
+
+    setRole(data[0]?.role);
+  }
+
+  // Initial data fetching on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!token) {
+        navigate("/");
+      }
+
+      try {
+        roleSet();
+      } catch (error) {
+        console.error("Error fetching user data:", error.message);
+      }
+    };
+
+    fetchData();
   }, [token, navigate]);
 
   // Function to sign out the user
@@ -96,7 +122,7 @@ const Account = () => {
       <Navbar />
 
       {/* Account Information */}
-      <div className="mt-36">
+      <div className="mt-10">
         <div className="mx-auto my-auto w-[500px]">
           <div className="bg-white rounded overflow-hidden shadow-lg">
             <div className="text-center p-6 bg-purple-600 border-b">
@@ -167,6 +193,25 @@ const Account = () => {
           </div>
         </div>
       </div>
+
+      {role === "member" || role === "admin" ? (
+        <div className="px-6 py-8 flex flex-col gap-4">
+          <p className="text-xl font-semibold">Attendance section</p>
+          <div className="bg-green-200 rounded-md">
+            <p className="text-lg font-medium p-4">
+              Please mark your attendance
+            </p>
+            <p className="text-md font-medium px-4 py-3">
+              Attendance Title (Attendance Availability)
+            </p>
+            <button className="w-full py-3 bg-green-600 hover:bg-green-700 text-white text-md font-semibold rounded-b-md">
+              Confirm Attendance
+            </button>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
