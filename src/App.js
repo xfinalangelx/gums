@@ -10,6 +10,7 @@ import Account from "./pages/Account";
 import { useEffect, useState } from "react";
 import Forum from "./pages/Forum";
 import Events from "./pages/Events";
+import UserList from "./pages/UserList";
 
 function App() {
   // Log the supabase object to the console
@@ -43,6 +44,7 @@ function App() {
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/forum" element={<Forum />} />
           <Route path="/event" element={<Events />} />
+          <Route path="/users" element={<UserList />} />
           <Route path="/registration" element={<RegistrationList />} />
           <Route path="/account" element={<Account />} />
         </Routes>

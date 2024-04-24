@@ -92,7 +92,7 @@ const Navbar = () => {
         )}
 
         {/* Forum List Link (conditionally rendered based on user role) */}
-        {role === "admin" || role === "advisor" || !role ? (
+        {role === "advisor" ? (
           <a
             href="/forum"
             className="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
@@ -109,6 +109,17 @@ const Navbar = () => {
         >
           Events
         </a>
+
+        {role === "advisor" ? (
+          <a
+            href="/users"
+            className="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+          >
+            Users
+          </a>
+        ) : (
+          <></>
+        )}
 
         {/* Account Settings Link */}
         <a

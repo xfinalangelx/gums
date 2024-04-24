@@ -174,11 +174,7 @@ const Events = () => {
       {/* Conditionally renders the components based on user role */}
 
       <div
-        className={
-          role === "admin" || role === "advisor"
-            ? "grid grid-cols-2 h-screen"
-            : "h-screen"
-        }
+        className={role === "admin" ? "grid grid-cols-2 h-screen" : "h-screen"}
       >
         <div className={"col-span-1 w-full h-full bg-orange-400"}>
           <div className="p-6">
@@ -225,7 +221,7 @@ const Events = () => {
           </div>
         </div>
 
-        {role === "admin" || role === "advisor" ? (
+        {role === "admin" ? (
           <div className="col-span-1 mt-10 my-6 mx-6">
             <h1 className="text-2xl font-semibold mb-4">Create Events</h1>
 
