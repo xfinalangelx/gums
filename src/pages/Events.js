@@ -26,26 +26,6 @@ const Events = () => {
     "Description",
     "Document",
   ];
-  const mockData = [
-    {
-      title: "Test",
-      description: "Testing description",
-      status: "created",
-      createdAt: "2024-01-06 13:42:09.71301+00",
-    },
-    {
-      title: "Test",
-      description: "Testing description",
-      status: "created",
-      createdAt: "2024-01-06 13:42:09.71301+00",
-    },
-    {
-      title: "Test",
-      description: "Testing description",
-      status: "created",
-      createdAt: "2024-01-06 13:42:09.71301+00",
-    },
-  ];
 
   let navigate = useNavigate();
 
@@ -91,6 +71,51 @@ const Events = () => {
     setTotalEventsList(data);
   }
 
+  // Fetch all Events lists
+  async function fetchAllEventsAttendanceFromUser() {
+    const { data } = await supabase
+      .from("attendance")
+      .select("*")
+      .eq("emails", obj.user.email);
+    setUserEventsList(data);
+  }
+
+  function renderButton(id) {
+    const event = userEventsList.filter((item) => item.event_id.includes(id));
+    if (event.length > 0) {
+      if (event[0].going) {
+        return (
+          <div className="w-full rounded-b bg-green-600 py-3 px-2 text-white text-center">
+            Attending
+          </div>
+        );
+      } else {
+        return (
+          <div className="w-full rounded-b bg-red-600 py-3 px-2 text-white text-center">
+            Not Attending
+          </div>
+        );
+      }
+    } else {
+      return (
+        <div className="w-full grid grid-cols-2">
+          <button
+            onClick={() => attending(id, true)}
+            className="w-full py-3 px-2 rounded-bl bg-green-600 hover:bg-green-800 text-white"
+          >
+            Attending
+          </button>
+          <button
+            onClick={() => attending(id, false)}
+            className="w-full py-3 px-2 rounded-br bg-red-600 hover:bg-red-800 text-white"
+          >
+            Not Attending
+          </button>
+        </div>
+      );
+    }
+  }
+
   // Initial data fetching on component mount
   useEffect(() => {
     const fetchData = async () => {
@@ -102,8 +127,9 @@ const Events = () => {
         roleSet();
         const { data } = await supabase.from("events").select("*");
 
-        setUserEventsList(data);
+        setTotalEventsList(data);
         fetchAllList();
+        fetchAllEventsAttendanceFromUser();
       } catch (error) {
         console.error("Error fetching user data:", error.message);
       }
@@ -143,6 +169,19 @@ const Events = () => {
     setOpen(true);
   }
 
+  async function attending(id, attend) {
+    const { error, data } = await supabase
+      .from("attendance")
+      .insert({
+        emails: obj.user.email,
+        event_id: id,
+        going: attend,
+      })
+      .select()
+      .eq("email", obj.user.email);
+    window.location.reload();
+  }
+
   function convertDateFormat(inputDate) {
     // Parse the input date string
     const date = new Date(inputDate);
@@ -176,14 +215,14 @@ const Events = () => {
       <div
         className={role === "admin" ? "grid grid-cols-2 h-screen" : "h-screen"}
       >
-        <div className={"col-span-1 w-full h-full bg-orange-400"}>
+        <div className={"col-span-1 w-full h-full"}>
           <div className="p-6">
             <h1 className="text-white font-semibold text-2xl">My Events</h1>
           </div>
           <div className="h-[600px] overflow-y-auto">
-            {userEventsList.length !== 0 ? (
-              userEventsList?.map((x) => (
-                <div className="rounded-md bg-white mx-4 my-3">
+            {totalEventsList.length !== 0 ? (
+              totalEventsList?.map((x) => (
+                <div className="rounded-md bg-white mx-4 my-3 border">
                   <div className="flex justify-between items-center border-b py-2 px-4">
                     <h3 className="font-semibold text-xl"> {x.title}</h3>
                     <p className="text-slate-400 text-md">{x.event_date}</p>
@@ -202,7 +241,7 @@ const Events = () => {
                           className="w-[300px]"
                         />
                       ) : (
-                        <div className="text-purple-600 text-3xl font-semibold w-[300px] h-[300px] flex justify-center items-center ">
+                        <div className="text-green-600 text-3xl font-semibold w-[300px] h-[300px] flex justify-center items-center ">
                           No docs
                         </div>
                       )}
@@ -213,6 +252,28 @@ const Events = () => {
                     created on: {convertDateFormat(x.created_at)} by{" "}
                     {x.author_email}
                   </div>
+                  {/* {userEventsList.map((y) => {
+                    let item;
+
+                    if (y.event_id === x.id) {
+                      item = y;
+                      return (
+                        <div>
+                          {item?.going ? (
+                            <div className="w-full rounded-b bg-green-600 py-3 px-2 text-white text-center">
+                              Attending
+                            </div>
+                          ) : (
+                            <div className="w-full rounded-b bg-red-600 py-3 px-2 text-white text-center">
+                              Not Attending
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
+                  })} */}
+
+                  {renderButton(x.id)}
                 </div>
               ))
             ) : (

@@ -8,6 +8,9 @@ const Home = () => {
   const token = sessionStorage.getItem("token");
   const [totalForumList, setTotalForumList] = useState([]);
   const [totalEventsList, setTotalEventsList] = useState([]);
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
+  let obj = JSON.parse(token);
 
   useEffect(() => {
     if (!token) {
@@ -15,7 +18,8 @@ const Home = () => {
     }
 
     fetchAllForumList();
-    fetchAllEventsList();
+    fetchAllComments();
+    console.log(comments);
   }, [token, navigate]);
 
   async function fetchAllForumList() {
@@ -23,11 +27,43 @@ const Home = () => {
     setTotalForumList(data);
   }
 
-  async function fetchAllEventsList() {
-    const { data } = await supabase.from("events").select("*");
-    setTotalEventsList(data);
+  async function fetchAllComments() {
+    const { data, error } = await supabase
+      .from("comments")
+      .select("*")
+      .order("created_at", { ascending: false });
+    setComments(data);
   }
 
+  function fetchComments(id) {
+    const commentGroup = comments.filter((item) => item.forum_id.includes(id));
+    console.log(commentGroup);
+    return commentGroup?.map((x) => (
+      <div className="flex flex-col gap-1 bg-green-50 p-2 rounded-md">
+        <p className="text-black font-semibold">{x.email}</p>
+        <p className="text-slate-800 text-sm">{x.comment}</p>
+        <p className="text-right text-sm text-slate-400">
+          {convertDateFormat(x.created_at)}
+        </p>
+      </div>
+    ));
+  }
+
+  async function submitComment(id) {
+    const { data } = await supabase
+      .from("comments")
+      .insert({ email: obj.user.email, comment: comment, forum_id: id })
+      .select();
+    window.location.reload();
+  }
+
+  function handleComment(event) {
+    setComment(event.target.value);
+  }
+
+  function validator() {
+    return comment.length < 1;
+  }
   function convertDateFormat(inputDate) {
     // Parse the input date string
     const date = new Date(inputDate);
@@ -56,7 +92,7 @@ const Home = () => {
     <>
       <Navbar />
       <div className="grid grid-cols-2">
-        <div className="col-span-1 bg-purple-600">
+        <div className="col-span-full">
           <h3 className="text-center py-2 font-semibold text-xl text-white">
             Forums
           </h3>
@@ -85,6 +121,10 @@ const Home = () => {
                           <h3 className="font-semibold text-xl">
                             {title} by {author_name}
                           </h3>
+                          <div className="flex justify-end items-center text-xs text-slate-500 py-2 px-4">
+                            created {convertDateFormat(created_at)} by{" "}
+                            {author_email}
+                          </div>
                         </div>
                         <div className="grid grid-cols-2">
                           <div className="col-span-1 flex justify-center items-center border-r">
@@ -100,7 +140,7 @@ const Home = () => {
                                 className="w-[300px]"
                               />
                             ) : (
-                              <div className="text-purple-600 text-3xl font-semibold w-[300px] h-[300px] flex justify-center items-center ">
+                              <div className="text-green-600 text-3xl font-semibold w-[300px] h-[300px] flex justify-center items-center ">
                                 No docs
                               </div>
                             )}
@@ -109,9 +149,24 @@ const Home = () => {
                             {description}
                           </div>
                         </div>
-                        <div className="flex justify-end items-center text-xs text-slate-500 border-t py-2 px-4">
-                          created {convertDateFormat(created_at)} by{" "}
-                          {author_email}
+                        <div className="border-t py-3 px-4 flex items-center gap-2">
+                          <input
+                            onChange={handleComment}
+                            type="text"
+                            className="w-full border border-gray-600 rounded p-1"
+                          />
+                          <button
+                            disabled={validator()}
+                            onClick={() => {
+                              submitComment(id);
+                            }}
+                            className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            Comment
+                          </button>
+                        </div>
+                        <div className="h-[300px] overflow-y-auto flex flex-col gap-3 px-4 py-2">
+                          {fetchComments(id)}
                         </div>
                       </div>
                     </div>
@@ -121,53 +176,6 @@ const Home = () => {
             ) : (
               <div className="text-center">
                 No new forums/announcements created yet!
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="col-span-1 bg-orange-400">
-          <h3 className="text-center py-2 font-semibold text-xl text-white">
-            Events
-          </h3>
-          <div className="w-full flex flex-col gap-4 max-h-[720px] overflow-y-auto">
-            {totalEventsList.length !== 0 ? (
-              totalEventsList?.map((x) => (
-                <div className="rounded-md border mx-4 my-3 bg-white">
-                  <div className="flex justify-between items-center border-b py-2 px-4">
-                    <h3 className="font-semibold text-xl"> {x.title}</h3>
-                    <p className="text-slate-400 text-md">{x.event_date}</p>
-                  </div>
-                  <div className="grid grid-cols-2">
-                    <div className="col-span-1 flex justify-center items-center border-r">
-                      {x.document ? (
-                        <img
-                          src={
-                            "https://hvzzpfhyghxvhtfvtivo.supabase.co/storage/v1/object/public/events/" +
-                            x.author_email +
-                            "eventsdocument" +
-                            x.created_at
-                          }
-                          alt="document"
-                          className="w-[300px]"
-                        />
-                      ) : (
-                        <div className="text-purple-600 text-3xl font-semibold w-[300px] h-[300px] flex justify-center items-center ">
-                          No docs
-                        </div>
-                      )}
-                    </div>
-                    <div className="col-span-1 px-4 py-2">{x.description}</div>
-                  </div>
-                  <div className="flex justify-end items-center text-xs text-slate-500 border-t py-2 px-4">
-                    created on: {convertDateFormat(x.created_at)} by{" "}
-                    {x.author_email}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="text-center text-white">
-                No Events created yet!
               </div>
             )}
           </div>

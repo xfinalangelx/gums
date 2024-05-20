@@ -11,6 +11,12 @@ import { useEffect, useState } from "react";
 import Forum from "./pages/Forum";
 import Events from "./pages/Events";
 import UserList from "./pages/UserList";
+import FeedbackForm from "./pages/FeedbackForm";
+import Gallery from "./pages/Gallery";
+import About from "./pages/About";
+import ManageAds from "./pages/ManageAds";
+import ManageGallery from "./pages/ManageGallery";
+import Attendance from "./pages/Attendance";
 
 function App() {
   // Log the supabase object to the console
@@ -42,6 +48,12 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
           <Route path="/feedback" element={<Feedback />} />
+          <Route path="/feedbackform" element={<FeedbackForm />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/ads" element={<ManageAds />} />
+          <Route path="/managegallery" element={<ManageGallery />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/attendance" element={<Attendance />} />
           <Route path="/forum" element={<Forum />} />
           <Route path="/event" element={<Events />} />
           <Route path="/users" element={<UserList />} />

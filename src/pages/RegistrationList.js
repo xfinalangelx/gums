@@ -124,7 +124,7 @@ const RegistrationList = () => {
                         onClick={() => {
                           approveUser(id, fullName, email, matricNumber, role);
                         }}
-                        className="text-white text-md font-semibold bg-purple-600 hover:bg-purple-700 rounded-md px-4 py-2"
+                        className="text-white text-md font-semibold bg-green-600 hover:bg-green-700 rounded-md px-4 py-2"
                       >
                         Approve
                       </button>

@@ -23,6 +23,7 @@ const Forum = () => {
     "Description",
     "Document",
     "Created At",
+    "Action",
   ];
   const mockData = [
     {
@@ -133,6 +134,15 @@ const Forum = () => {
     setOpen(false);
   }
 
+  async function deleteForum(id) {
+    const { error, data } = await supabase
+      .from("forums")
+      .delete()
+      .eq("id", id)
+      .select();
+    window.location.reload();
+  }
+
   function convertDateFormat(inputDate) {
     // Parse the input date string
     const date = new Date(inputDate);
@@ -230,7 +240,7 @@ const Forum = () => {
                   onClick={() => {
                     submitForumForm();
                   }}
-                  className="bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md py-2 px-4 w-full text-center"
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md py-2 px-4 w-full text-center"
                 >
                   Confirm
                 </button>
@@ -251,7 +261,7 @@ const Forum = () => {
         <div className="flex justify-end items-center p-4">
           <button
             onClick={() => setOpen(true)}
-            className="py-2 px-4 rounded-md bg-purple-600 text-white flex justify-center items-center hover:bg-purple-700"
+            className="py-2 px-4 rounded-md bg-green-600 text-white flex justify-center items-center hover:bg-green-700"
           >
             Add Forum
           </button>
@@ -322,6 +332,14 @@ const Forum = () => {
                       <p className="font-normal">
                         {convertDateFormat(created_at)}
                       </p>
+                    </td>
+                    <td className={classes}>
+                      <button
+                        onClick={() => deleteForum(id)}
+                        className="bg-red-600 hover:bg-red-700 text-white rounded py-2 px-4"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 );

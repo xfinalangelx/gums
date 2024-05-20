@@ -146,7 +146,7 @@ const UserList = () => {
                 onClick={() => {
                   submitMerit();
                 }}
-                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md py-2 px-4 w-full text-center"
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md py-2 px-4 w-full text-center"
               >
                 Update Merit
               </button>
@@ -225,7 +225,7 @@ const UserList = () => {
                         Current role: {role}
                         <div className="flex flex-col items-start gap-1 py-4">
                           <button
-                            className="text-sm text-white bg-purple-600 px-2 py-1 rounded hover:bg-purple-700"
+                            className="text-sm text-white bg-green-600 px-2 py-1 rounded hover:bg-green-700"
                             onClick={() => {
                               modifyRole(email, "advisor");
                             }}
@@ -257,7 +257,7 @@ const UserList = () => {
                             setOpen(true);
                             setEmail(email);
                           }}
-                          className="text-purple-600 underline text-sm font-bold hover:text-purple-900"
+                          className="text-green-600 underline text-sm font-bold hover:text-green-900"
                         >
                           Edit Merit
                         </button>

@@ -81,7 +81,7 @@ const Register = () => {
               </p>
               <a
                 href="/"
-                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md py-2 px-4 w-full text-center"
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md py-2 px-4 w-full text-center"
               >
                 Back to Login
               </a>
@@ -94,10 +94,8 @@ const Register = () => {
 
       {/* Main Registration Form */}
       <div className="bg-white flex justify-center items-center h-screen">
-        <div className="w-full h-full hidden lg:flex lg:justify-center lg:items-center bg-purple-600">
-          <h1 className="text-white font-black text-4xl">
-            Girl Guide UM Management System
-          </h1>
+        <div className="w-full h-full hidden lg:flex lg:justify-center lg:items-center bg-green-600">
+          <h1 className="text-white font-black text-4xl">PPPSUM</h1>
         </div>
 
         <div className="lg:px-36 md:px-52 sm:20 p-8 w-full lg:w-1/2">
@@ -204,7 +202,7 @@ const Register = () => {
 
           {/* Submit Button */}
           <button
-            className="bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md py-2 px-4 w-full disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-purple-600"
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md py-2 px-4 w-full disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-green-600"
             disabled={validator()}
             onClick={() => submitRegistrationForm()}
           >

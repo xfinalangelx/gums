@@ -99,7 +99,7 @@ const Account = () => {
                 onClick={() => {
                   changePassword();
                 }}
-                className="bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md py-2 px-4 w-full text-center"
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md py-2 px-4 w-full text-center"
               >
                 Change Password
               </button>
@@ -125,7 +125,7 @@ const Account = () => {
       <div className="mt-10">
         <div className="mx-auto my-auto w-[500px]">
           <div className="bg-white rounded overflow-hidden shadow-lg">
-            <div className="text-center p-6 bg-purple-600 border-b">
+            <div className="text-center p-6 bg-green-600 border-b">
               <svg
                 aria-hidden="true"
                 role="img"

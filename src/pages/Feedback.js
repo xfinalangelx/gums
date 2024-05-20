@@ -4,13 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 
 const Feedback = () => {
-  const [fullName, setFullName] = useState("");
-  const [matricNumber, setMatricNumber] = useState("");
-  const [document, setDocument] = useState();
-  const [title, setTitle] = useState();
-  const [content, setContent] = useState();
-  const [documentValidator, setDocumentValidator] = useState(false);
-  const [open, setOpen] = useState(false);
   const [role, setRole] = useState();
   const [userFeedbackList, setUserFeedbackList] = useState([]);
   const [totalFeedbackList, setTotalFeedbackList] = useState([]);
@@ -18,57 +11,15 @@ const Feedback = () => {
   let obj = JSON.parse(token);
   const [update, setUpdate] = useState(false);
   const TABLE_HEAD = [
-    "Author Name",
+    "Full Name",
     "Email",
-    "Matric Number",
     "Title",
     "Description",
     "Document",
     "Status",
   ];
-  const mockData = [
-    {
-      title: "Test",
-      description: "Testing description",
-      status: "created",
-      createdAt: "2024-01-06 13:42:09.71301+00",
-    },
-    {
-      title: "Test",
-      description: "Testing description",
-      status: "created",
-      createdAt: "2024-01-06 13:42:09.71301+00",
-    },
-    {
-      title: "Test",
-      description: "Testing description",
-      status: "created",
-      createdAt: "2024-01-06 13:42:09.71301+00",
-    },
-  ];
 
   let navigate = useNavigate();
-
-  // Event handlers for input fields
-  function handleFullName(event) {
-    setFullName(event.target.value);
-  }
-
-  function handleMatricNumber(event) {
-    setMatricNumber(event.target.value);
-  }
-
-  function handleTitle(event) {
-    setTitle(event.target.value);
-  }
-  function handleContent(event) {
-    setContent(event.target.value);
-  }
-
-  function handleDocument(event) {
-    setDocument(event.target.files[0]);
-    setDocumentValidator(true);
-  }
 
   // Fetch user role from Supabase
   async function roleSet() {
@@ -113,35 +64,6 @@ const Feedback = () => {
 
     fetchData();
   }, [token, navigate, update]);
-
-  // Submit feedback form
-  async function submitFeedbackForm() {
-    const { error, data } = await supabase
-      .from("feedbacks")
-      .insert({
-        author_email: obj.user.email,
-        author_name: fullName,
-        author_matric: matricNumber,
-        title: title,
-        description: content,
-        document: documentValidator,
-      })
-      .select();
-
-    if (documentValidator) {
-      const { res } = await supabase.storage
-        .from("feedback")
-        .upload(
-          matricNumber + "feedbackdocument" + data[0].created_at,
-          document
-        );
-    }
-
-    // Update the state to trigger a re-render
-    setUpdate((prevUpdate) => !prevUpdate);
-
-    setOpen(true);
-  }
 
   function convertDateFormat(inputDate) {
     // Parse the input date string
@@ -218,7 +140,6 @@ const Feedback = () => {
                     id,
                     author_email,
                     author_name,
-                    author_matric,
                     title,
                     description,
                     document,
@@ -241,9 +162,6 @@ const Feedback = () => {
                         <p className="font-normal">{author_email}</p>
                       </td>
                       <td className={classes}>
-                        <p className="font-normal">{author_matric}</p>
-                      </td>
-                      <td className={classes}>
                         <p className="font-normal">{title}</p>
                       </td>
                       <td className={classes}>
@@ -254,7 +172,7 @@ const Feedback = () => {
                           <img
                             src={
                               "https://hvzzpfhyghxvhtfvtivo.supabase.co/storage/v1/object/public/feedback/" +
-                              author_matric +
+                              author_email +
                               "feedbackdocument" +
                               created_at
                             }
@@ -295,7 +213,7 @@ const Feedback = () => {
         </div>
       ) : (
         <div className="grid grid-cols-2 h-screen">
-          <div className="col-span-1 w-full h-full bg-purple-600">
+          <div className="col-span-1 w-full h-full bg-green-600">
             <div className="m-6">
               <h1 className="text-white font-semibold text-2xl">
                 My Feedbacks
@@ -321,70 +239,6 @@ const Feedback = () => {
                 <div className="text-center text-white">No feedbacks</div>
               )}
             </div>
-          </div>
-          <div className="col-span-1 mt-10 my-6 mx-6">
-            <h1 className="text-2xl font-semibold mb-4">Feedback Form</h1>
-            <div className="mb-4">
-              <label className="block text-gray-600">Full Name</label>
-              <input
-                type="text"
-                id="fullName"
-                name="fullName"
-                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                onChange={handleFullName}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-600">Matric Number</label>
-              <input
-                type="text"
-                id="matricNo"
-                name="matricNo"
-                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                onChange={handleMatricNumber}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-600">Feedback Title</label>
-              <input
-                type="text"
-                id="matricNo"
-                name="matricNo"
-                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                onChange={handleTitle}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-600">Feedback Content</label>
-              <textarea
-                type="text"
-                id="matricNo"
-                name="matricNo"
-                className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                onChange={handleContent}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-600">Feedback Attachment</label>
-              <input
-                type="file"
-                id="documents"
-                name="documents"
-                className="py-2"
-                onChange={handleDocument}
-              />
-            </div>
-
-            <button
-              className="bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md py-2 px-4 w-full disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-purple-600"
-              onClick={() => submitFeedbackForm()}
-            >
-              Submit Feedback
-            </button>
           </div>
         </div>
       )}

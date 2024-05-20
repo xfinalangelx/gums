@@ -59,86 +59,165 @@ const Navbar = () => {
     fetchUserData(obj.user.email);
   }, [token, navigate]);
 
-  return (
-    // Navbar UI
-    <nav className="bg-white shadow dark:bg-gray-800">
-      <div className="container flex items-center justify-center p-6 mx-auto text-gray-600 capitalize dark:text-gray-300">
-        {/* Home Link */}
-        <a
-          href="/home"
-          className="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
-        >
-          Home
-        </a>
+  if (role === "advisor") {
+    return (
+      // Navbar UI
+      <nav className="bg-green-800">
+        <div className="container flex items-center justify-center p-6 mx-auto text-white capitalize">
+          {/* Home Link */}
+          <a
+            href="/home"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform  hover:border-green-500 mx-1.5 sm:mx-6"
+          >
+            Home
+          </a>
 
-        {/* Feedback Link */}
-        <a
-          href="/feedback"
-          className="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
-        >
-          Feedback
-        </a>
-
-        {/* Registration List Link (conditionally rendered based on user role) */}
-        {role === "admin" || role === "advisor" || !role ? (
+          {/* Registration List Link (conditionally rendered based on user role) */}
           <a
             href="/registration"
-            className="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform hover:border-green-500 mx-1.5 sm:mx-6"
           >
             Registration List
           </a>
-        ) : (
-          <></>
-        )}
 
-        {/* Forum List Link (conditionally rendered based on user role) */}
-        {role === "advisor" ? (
+          {/* Forum List Link (conditionally rendered based on user role) */}
           <a
             href="/forum"
-            className="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform hover:border-green-500 mx-1.5 sm:mx-6"
           >
             Forum
           </a>
-        ) : (
-          <></>
-        )}
-
-        <a
-          href="/event"
-          className="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
-        >
-          Events
-        </a>
-
-        {role === "advisor" ? (
           <a
             href="/users"
-            className="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform hover:border-green-500 mx-1.5 sm:mx-6"
           >
             Users
           </a>
-        ) : (
-          <></>
-        )}
 
-        {/* Account Settings Link */}
-        <a
-          href="/account"
-          className="border-b-2 border-transparent hover:text-gray-800 transition-colors duration-300 transform dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
-        >
-          Account Settings
-        </a>
+          <a
+            href="/ads"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform hover:border-green-500 mx-1.5 sm:mx-6"
+          >
+            Manage Ads
+          </a>
 
-        {/* Logout Button */}
-        <button
-          className="bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md py-2 px-4 "
-          onClick={() => signOut()}
-        >
-          Logout
-        </button>
-      </div>
-    </nav>
-  );
+          <a
+            href="/managegallery"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform hover:border-green-500 mx-1.5 sm:mx-6"
+          >
+            Manage Gallery
+          </a>
+
+          <a
+            href="/attendance"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform hover:border-green-500 mx-1.5 sm:mx-6"
+          >
+            Manage Attendance
+          </a>
+
+          {/* Account Settings Link */}
+          <a
+            href="/account"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform hover:border-green-500 mx-1.5 sm:mx-6"
+          >
+            Account Settings
+          </a>
+
+          {/* Logout Button */}
+          <button
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md py-2 px-4 "
+            onClick={() => signOut()}
+          >
+            Logout
+          </button>
+        </div>
+      </nav>
+    );
+  } else if (role === "admin") {
+    return (
+      // Navbar UI
+      <nav className="bg-green-800">
+        <div className="container flex items-center justify-center p-6 mx-auto text-white capitalize">
+          {/* Home Link */}
+          <a
+            href="/home"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform  hover:border-green-500 mx-1.5 sm:mx-6"
+          >
+            Home
+          </a>
+
+          {/* Registration List Link (conditionally rendered based on user role) */}
+          <a
+            href="/registration"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform hover:border-green-500 mx-1.5 sm:mx-6"
+          >
+            Registration List
+          </a>
+
+          <a
+            href="/event"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform hover:border-green-500 mx-1.5 sm:mx-6"
+          >
+            Events
+          </a>
+
+          {/* Account Settings Link */}
+          <a
+            href="/account"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform hover:border-green-500 mx-1.5 sm:mx-6"
+          >
+            Account Settings
+          </a>
+
+          {/* Logout Button */}
+          <button
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md py-2 px-4 "
+            onClick={() => signOut()}
+          >
+            Logout
+          </button>
+        </div>
+      </nav>
+    );
+  } else {
+    return (
+      // Navbar UI
+      <nav className="bg-green-800">
+        <div className="container flex items-center justify-center p-6 mx-auto text-white capitalize">
+          {/* Home Link */}
+          <a
+            href="/home"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform  hover:border-green-500 mx-1.5 sm:mx-6"
+          >
+            Home
+          </a>
+
+          <a
+            href="/event"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform hover:border-green-500 mx-1.5 sm:mx-6"
+          >
+            Events
+          </a>
+
+          {/* Account Settings Link */}
+          <a
+            href="/account"
+            className="border-b-2 border-transparent hover:text-green-600 transition-colors duration-300 transform hover:border-green-500 mx-1.5 sm:mx-6"
+          >
+            Account Settings
+          </a>
+
+          {/* Logout Button */}
+          <button
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md py-2 px-4 "
+            onClick={() => signOut()}
+          >
+            Logout
+          </button>
+        </div>
+      </nav>
+    );
+  }
 };
 
 export default Navbar;
